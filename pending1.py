@@ -1,14 +1,13 @@
 import streamlit as st
-from snowflake.snowpark.context import get_active_session
 from snowflake.snowpark.functions import col
 
 # Write directly to the app
 st.title("🥤 Pending Smoothie Orders 🥤")
 st.write("Orders that need to be filled.")
 
-# Connect to Snowflake
-session = get_active_session()
-
+# Establish Snowflake connection
+cnx = st.connection("snowflake")
+session = cnx.session()
 # Fetch unfilled orders
 my_dataframe = session.table("smoothies.public.orders").filter(col("ORDER_FILLED") == False).select(
     col("INGREDIENTS"),
